@@ -62,5 +62,5 @@ class ShipmentIn:
                 'category': category_id,
                 'unit_price': (incomming_move.purchase_unit_price or
                     incomming_move.produt.cost_price),
-                'origin': incomming_move.id,
+                'origin': 'stock.move,%s'%incomming_move.id,
                 }]
