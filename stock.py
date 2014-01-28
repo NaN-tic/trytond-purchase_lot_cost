@@ -22,7 +22,6 @@ class Lot:
             if (getattr(move, 'origin') and
                     isinstance(move.origin, PurchaseLine)):
                 return None
-
         return super(Lot, self)._on_change_product_cost_lines()
 
 
@@ -55,12 +54,24 @@ class ShipmentIn:
                 or not isinstance(incomming_move.origin, PurchaseLine)):
             return None
 
-        category_id = ModelData.get_id('stock_lot_cost',
+        cost_lines = []
+        default_category_id = ModelData.get_id('stock_lot_cost',
             'cost_category_standard_price')
-        return [{
+        cost_lines.append({
                 'lot': incomming_move.lot.id,
-                'category': category_id,
+                'category': default_category_id,
                 'unit_price': (incomming_move.purchase_unit_price or
-                    incomming_move.produt.cost_price),
-                'origin': 'stock.move,%s'%incomming_move.id,
-                }]
+                    incomming_move.product.cost_price),
+                'origin': 'stock.move,%s' % incomming_move.id,
+                })
+
+        if getattr(incomming_move, 'unit_shipment_cost', False):
+            shipment_category_id = ModelData.get_id('stock_lot_cost',
+                'cost_category_shipment_cost')
+            cost_lines.append({
+                    'lot': incomming_move.lot.id,
+                    'category': shipment_category_id,
+                    'unit_price': incomming_move.unit_shipment_cost,
+                    'origin': 'stock.move,%s' % incomming_move.id,
+                    })
+        return cost_lines
