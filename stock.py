@@ -49,6 +49,7 @@ class ShipmentIn:
         pool = Pool()
         ModelData = pool.get('ir.model.data')
         PurchaseLine = pool.get('purchase.line')
+        Uom = pool.get('product.uom')
 
         if (not incomming_move.lot
                 or not isinstance(incomming_move.origin, PurchaseLine)):
@@ -57,21 +58,29 @@ class ShipmentIn:
         cost_lines = []
         default_category_id = ModelData.get_id('stock_lot_cost',
             'cost_category_standard_price')
+        if incomming_move.purchase_unit_price:
+            unit_price = Uom.compute_price(incomming_move.purchase_unit,
+                incomming_move.purchase_unit_price,
+                incomming_move.product.default_uom)
+        else:
+            unit_price = incomming_move.product.cost_price
         cost_lines.append({
                 'lot': incomming_move.lot.id,
                 'category': default_category_id,
-                'unit_price': (incomming_move.purchase_unit_price or
-                    incomming_move.product.cost_price),
+                'unit_price': unit_price,
                 'origin': 'stock.move,%s' % incomming_move.id,
                 })
 
         if getattr(incomming_move, 'unit_shipment_cost', False):
             shipment_category_id = ModelData.get_id('stock_lot_cost',
                 'cost_category_shipment_cost')
+            unit_shipment_cost = Uom.compute_price(incomming_move.uom,
+                incomming_move.unit_shipment_cost,
+                incomming_move.product.default_uom)
             cost_lines.append({
                     'lot': incomming_move.lot.id,
                     'category': shipment_category_id,
-                    'unit_price': incomming_move.unit_shipment_cost,
+                    'unit_price': unit_shipment_cost,
                     'origin': 'stock.move,%s' % incomming_move.id,
                     })
         return cost_lines
