@@ -19,7 +19,7 @@ class Lot:
         context = Transaction().context
         if context.get('from_move'):
             move = Move(context['from_move'])
-            if (getattr(move, 'origin') and
+            if (hasattr(move, 'origin') and move.origin and
                     isinstance(move.origin, PurchaseLine)):
                 return None
         return super(Lot, self)._on_change_product_cost_lines()
