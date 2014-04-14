@@ -56,8 +56,8 @@ class ShipmentIn:
             return None
 
         cost_lines = []
-        default_category_id = ModelData.get_id('stock_lot_cost',
-            'cost_category_standard_price')
+        default_category_id = ModelData.get_id('purchase_lot_cost',
+            'cost_category_purchase_cost')
         if incomming_move.purchase_unit_price:
             unit_price = Uom.compute_price(incomming_move.purchase_unit,
                 incomming_move.purchase_unit_price,

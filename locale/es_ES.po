@@ -1,0 +1,7 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "model:stock.lot.cost_category,name:cost_category_purchase_cost"
+msgid "Purchase Cost"
+msgstr "Coste de compra"

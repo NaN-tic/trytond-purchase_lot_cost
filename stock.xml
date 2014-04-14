@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!-- The COPYRIGHT file at the top level of this repository contains the full
+     copyright notices and license terms. -->
+<tryton>
+    <data noupdate="1">
+        <record model="stock.lot.cost_category"
+                id="cost_category_purchase_cost">
+            <field name="name">Purchase Cost</field>
+        </record>
+    </data>
+</tryton>
