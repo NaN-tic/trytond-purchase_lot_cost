@@ -5,11 +5,11 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
 __all__ = ['Lot', 'ShipmentIn']
-__metaclass__ = PoolMeta
 
 
 class Lot:
     __name__ = 'stock.lot'
+    __metaclass__ = PoolMeta
 
     def _on_change_product_cost_lines(self):
         pool = Pool()
@@ -21,12 +21,13 @@ class Lot:
             move = Move(context['from_move'])
             if (hasattr(move, 'origin') and move.origin and
                     isinstance(move.origin, PurchaseLine)):
-                return None
-        return super(Lot, self)._on_change_product_cost_lines()
+                return
+        super(Lot, self)._on_change_product_cost_lines()
 
 
 class ShipmentIn:
     __name__ = 'stock.shipment.in'
+    __metaclass__ = PoolMeta
 
     @classmethod
     @ModelView.button
