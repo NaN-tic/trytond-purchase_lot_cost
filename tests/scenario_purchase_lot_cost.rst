@@ -66,6 +66,26 @@ Create supplier::
     >>> supplier = Party(name='Supplier')
     >>> supplier.save()
 
+Create tax::
+
+    >>> tax = create_tax(Decimal('.10'))
+    >>> tax.save()
+
+
+Create account categories::
+
+    >>> ProductCategory = Model.get('product.category')
+    >>> account_category = ProductCategory(name="Account Category")
+    >>> account_category.accounting = True
+    >>> account_category.account_expense = expense
+    >>> account_category.account_revenue = revenue
+    >>> account_category.save()
+
+    >>> account_category_tax, = account_category.duplicate()
+    >>> account_category_tax.supplier_taxes.append(tax)
+    >>> account_category_tax.save()
+
+
 Create products::
 
     >>> ProductUom = Model.get('product.uom')
@@ -79,8 +99,7 @@ Create products::
     >>> template.type = 'goods'
     >>> template.purchasable = True
     >>> template.list_price = Decimal('20')
-    >>> template.account_expense = expense
-    >>> template.account_revenue = revenue
+    >>> template.account_category = account_category_tax
     >>> template.save()
     >>> product.template = template
     >>> product.cost_price = Decimal('8')
@@ -110,7 +129,7 @@ Purchase product with different unit price::
     >>> purchase.click('confirm')
     >>> purchase.click('process')
     >>> purchase.state
-    u'processing'
+    'processing'
     >>> purchase.reload()
     >>> len(purchase.moves), len(purchase.shipment_returns), len(purchase.invoices)
     (1, 0, 1)
@@ -146,7 +165,7 @@ Receive products::
     >>> ShipmentIn.receive([shipment.id], config.context)
     >>> shipment.reload()
     >>> shipment.state
-    u'received'
+    'received'
     >>> move, = shipment.incoming_moves
     >>> move.unit_price == Decimal('9')
     True

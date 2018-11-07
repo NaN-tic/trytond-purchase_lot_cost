@@ -7,9 +7,8 @@ from trytond.transaction import Transaction
 __all__ = ['Lot', 'ShipmentIn']
 
 
-class Lot:
+class Lot(metaclass=PoolMeta):
     __name__ = 'stock.lot'
-    __metaclass__ = PoolMeta
 
     def _on_change_product_cost_lines(self):
         pool = Pool()
@@ -25,9 +24,8 @@ class Lot:
         super(Lot, self)._on_change_product_cost_lines()
 
 
-class ShipmentIn:
+class ShipmentIn(metaclass=PoolMeta):
     __name__ = 'stock.shipment.in'
-    __metaclass__ = PoolMeta
 
     @classmethod
     @ModelView.button
