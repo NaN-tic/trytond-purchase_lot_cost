@@ -57,9 +57,9 @@ class ShipmentIn(metaclass=PoolMeta):
         cost_lines = []
         default_category_id = ModelData.get_id('purchase_lot_cost',
             'cost_category_purchase_cost')
-        if incomming_move.purchase_unit_price:
-            unit_price = Uom.compute_price(incomming_move.purchase_unit,
-                incomming_move.purchase_unit_price,
+        if incomming_move.origin and incomming_move.origin.unit_price:
+            unit_price = Uom.compute_price(incomming_move.origin.unit,
+                incomming_move.origin.unit_price,
                 incomming_move.product.default_uom)
         else:
             unit_price = incomming_move.product.cost_price

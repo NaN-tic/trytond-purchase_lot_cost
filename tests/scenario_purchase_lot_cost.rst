@@ -127,7 +127,6 @@ Purchase product with different unit price::
     >>> purchase.save()
     >>> purchase.click('quote')
     >>> purchase.click('confirm')
-    >>> purchase.click('process')
     >>> purchase.state
     'processing'
     >>> purchase.reload()
@@ -141,7 +140,6 @@ Create a Lot for purchased product ::
     >>> Lot = Model.get('stock.lot')
     >>> lot = Lot(number='1')
     >>> lot.product = product
-    >>> lot.cost_price
     >>> lot.save()
     >>> move.lot = lot
     >>> move.save()
@@ -162,7 +160,7 @@ Create an Incomming Shipment for purchased product::
 
 Receive products::
 
-    >>> ShipmentIn.receive([shipment.id], config.context)
+    >>> shipment.click('receive')
     >>> shipment.reload()
     >>> shipment.state
     'received'
