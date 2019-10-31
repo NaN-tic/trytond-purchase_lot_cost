@@ -54,12 +54,6 @@ Create chart of accounts::
     >>> account_tax = accounts['tax']
     >>> account_cash = accounts['cash']
 
-    >>> Journal = Model.get('account.journal')
-    >>> cash_journal, = Journal.find([('type', '=', 'cash')])
-    >>> cash_journal.credit_account = account_cash
-    >>> cash_journal.debit_account = account_cash
-    >>> cash_journal.save()
-
 Create supplier::
 
     >>> Party = Model.get('party.party')
